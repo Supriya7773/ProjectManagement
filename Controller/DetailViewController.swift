@@ -94,6 +94,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func createProject(){
         print("\n\n Create project called")
+        let creteProjVC:CreateProjectViewController = CreateProjectViewController();
+        print("\n\n navigation object: \(self.navigationController)")
+        self.navigationController?.pushViewController(creteProjVC, animated: true)
     }
 
     /*
