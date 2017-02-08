@@ -15,6 +15,8 @@ class DBHelper: NSObject {
     
     var dB: Connection;
     
+    static let sharedInstance = DBHelper(fromString: "path")
+    
     let users = Table("project")
     let projectId = Expression<Int64>("project_id")
     let projectTitle = Expression<String?>("project_title")
@@ -25,6 +27,9 @@ class DBHelper: NSObject {
     
     
     init(fromString string: NSString) {
+        
+        print("\n In DBHelper's INIT\n")
+        
         self.dB = try! Connection();
         super.init();
         self.dB = createConnection();

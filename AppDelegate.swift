@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        detailViewController.monster = firstMonster        
         
         DispatchQueue.global(qos: .background).async {
-            print("\(DBHelper.init(fromString: "a"))");
+            print("\n\n In didFinishLaunching: \(DBHelper.sharedInstance)")
         }
         
         return true

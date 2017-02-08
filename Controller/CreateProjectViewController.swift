@@ -30,9 +30,6 @@ class CreateProjectViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print("CreateProjectViewController called")
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,8 +59,7 @@ class CreateProjectViewController: UIViewController, UITextFieldDelegate {
         newProjectDict["pend"]      = projectEndTimeField.text!;
         newProjectDict["pstatus"]   = projectStatusField.text!;
         
-        let helper:DBHelper = DBHelper.init(fromString: "w")
-        let result = helper.addProject(aProject: newProjectDict)
+        let result = DBHelper.sharedInstance.addProject(aProject: newProjectDict)
         
         if result{
             print("Data saved SUCCESSFULLY")
