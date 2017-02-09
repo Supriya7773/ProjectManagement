@@ -10,7 +10,8 @@ import UIKit
 import SwiftyJSON
 
 class Project: NSObject {
-
+    
+    var pID     : String    = ""    
     var pName   : String    = ""
     var pManager: String    = ""
     var pStatus : String    = ""
@@ -21,12 +22,14 @@ class Project: NSObject {
         super.init();
     }
     
-    init(projectName: String,
+    init(projectID: String,
+         projectName: String,
          projectManager: String,
          projectStartDate: String,
          projectEndDate: String,
          projectStatus: String){
         
+        pID         = projectID
         pName       = projectName
         pManager    = projectManager
         pStart      = projectStartDate

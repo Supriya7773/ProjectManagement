@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import SQLite
+import Toaster
+import DropDown
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.global(qos: .background).async {
             print("\n\n In didFinishLaunching: \(DBHelper.sharedInstance)")
         }
-        
+        DropDown.startListeningToKeyboard()
         return true
     }
 
@@ -54,6 +55,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
+    //MARK: - Toaster Methods
+    
+    func showToastMessage(message: String, forTime: TimeInterval?){
+        
+        if forTime != nil {
+            Toast(text: message, delay: 0, duration: forTime!).show()
+        }
+        else{
+            Toast(text: message).show()
+        }
+    }
 
 }
 

@@ -34,18 +34,13 @@ class DBHelper: NSObject {
         super.init();
         self.dB = createConnection();
         createDB()
-        
-        let allProjectsInDB = getAllProjects()
-        for aProject:Project in allProjectsInDB {
-            print("\n\n Name: \(aProject.pName) \n Manager: \(aProject.pManager)");
-        }
     }
     
     func createConnection() -> (Connection){
         let path = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true
             ).first!
-        print("DB is stores at :::  \(path)/db.sqlite3");
+        print("\n DB is stores at :::\n  \(path)/db.sqlite3 \n\n");
         dB = try! Connection("\(path)/db.sqlite3")
         
         return dB;
@@ -62,11 +57,13 @@ class DBHelper: NSObject {
             t.column(projectManager)
             t.column(projectStatus)
             
-            print("\n PROJECT table created");
+            print("\n PROJECT table created \n");
         })
        
         
     }
+    
+    //MARK: - INSERT
     
     func addProject(aProject: [String:String]) -> (Bool){
         let users = Table("project")
@@ -75,22 +72,57 @@ class DBHelper: NSObject {
                                   projectStartTime <- aProject["pstart"]!,
                                   projectEndTime <- aProject["pend"]!,
                                   projectStatus <- aProject["pstatus"]!))
-
-        
-        for user in try! dB.prepare(users) {
-            print("projectTitle: \(user[projectTitle]), projectManager: \(user[projectManager])")
+        return true
+    }
+    
+    
+    //MARK: - UPDATE
+    
+    func updateProject(aProject: [String:String], forProjectID: String) -> (Bool) {
+        do {
+            let alice = users.filter(projectId == Int64(forProjectID)!)
+            if try dB.run(alice.update(projectTitle <- aProject["pname"]!,
+                                       projectManager <- aProject["pmanager"]!,
+                                       projectStartTime <- aProject["pstart"]!,
+                                       projectEndTime <- aProject["pend"]!,
+                                       projectStatus <- aProject["pstatus"]!)) > 0 {
+            } else {
+                return false
+            }
+        } catch {
+            print("update failed: \(error)")
+            return false
+        }
+        return true
+    }
+    
+    
+    //MARK: - DELETE
+    
+    func deleteProject(forProjectID: String) -> (Bool) {
+        let alice = users.filter(projectId == Int64(forProjectID)!)
+        do {
+            if try dB.run(alice.delete()) > 0 {                
+            } else {
+                return false
+            }
+        } catch {
+            print("delete failed: \(error)")
+            return false
         }
         
         return true
     }
+    
+    //MARK: - SELECT ALL
     
     func getAllProjects() -> (Array<Project>) {
         
         var allProject = [Project]()
         
         for user in try! dB.prepare(users) {
-            print("\n\n ProjectID: \(user[projectId])    projectTitle: \(user[projectTitle]))")
-            let newProject:Project = Project(projectName: user[projectTitle]!, 
+            let newProject:Project = Project(projectID: String(user[projectId]),
+                                             projectName: user[projectTitle]!, 
                                              projectManager: user[projectManager], 
                                              projectStartDate: user[projectStartTime], 
                                              projectEndDate: user[projectEndTime], 
