@@ -110,8 +110,7 @@ class CreateProjectViewController: UIViewController, UITextFieldDelegate {
     
     func showDropdownList(forView: UITextField!) {
         let fromView = forView
-        let dropDown = DropDown()        
-        dropDown.anchorView = fromView
+        let dropDown = DropDown(anchorView: fromView!)
         dropDown.dataSource = ["new","open","close","deployed","maintenance","testing"]
 //        dropDown.show()
     }
